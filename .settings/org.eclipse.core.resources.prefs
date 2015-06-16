@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//src/com/example/android/util/HttpUtil.java=UTF-8
+encoding//src/com/example/android/util/Utility.java=UTF-8
+encoding//src/com/example/weatherforecasttest/activity/ChooseAreaActivity.java=UTF-8
+encoding//src/com/example/weatherforecasttest/activity/WeatherActivity.java=UTF-8
+encoding//src/com/example/weatherforecasttest/db/CoolWeatherDB.java=UTF-8
+encoding//src/com/example/weatherforecasttest/db/CoolWeatherOpenHelper.java=UTF-8
+encoding//src/com/example/weatherforecasttest/model/City.java=UTF-8
+encoding//src/com/example/weatherforecasttest/model/County.java=UTF-8
+encoding//src/com/example/weatherforecasttest/model/Province.java=UTF-8
+encoding//src/com/example/weatherforecasttest/receiver/AutoUpdateReceiver.java=UTF-8
+encoding//src/com/example/weatherforecasttest/service/AutoUpdateService.java=UTF-8

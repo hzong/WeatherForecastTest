@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="foreast_type">
+        <item >语音</item>
+        <item >音乐</item>
+        <item >天气预报</item>
+        <item >震动</item>
+    </string-array>
+    
+</resources>
