@@ -63,7 +63,7 @@ public class ButtonCombinedLayout extends LinearLayout {
 	private Button setButtonCombined(int id,String name,OnClickListener clickListener){
 		Button but =  (Button)findViewById(id);
 		but.setText(name);
-		if(clickListener == null){
+		if(clickListener != null){
 			but.setOnClickListener(clickListener);
 		}else{
 			but.setOnClickListener(new OnClickListener() {

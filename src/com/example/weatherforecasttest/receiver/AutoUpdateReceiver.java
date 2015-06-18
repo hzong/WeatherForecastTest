@@ -1,6 +1,7 @@
 package com.example.weatherforecasttest.receiver;
 
-import com.coolweather.app.service.AutoUpdateService;
+
+import com.example.weatherforecasttest.service.AutoUpdateService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

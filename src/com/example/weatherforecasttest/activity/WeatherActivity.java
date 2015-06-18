@@ -2,24 +2,35 @@ package com.example.weatherforecasttest.activity;
 
 //import net.youmi.android.banner.AdSize;
 //import net.youmi.android.banner.AdView;
+import com.example.android.tags.button.combined.ButtonCombinedLayout;
+import com.example.android.tags.dialog.menu.CustomMenuDialog;
+import com.example.android.util.DateTimeUtil;
 import com.example.android.util.HttpCallbackListener;
 import com.example.android.util.HttpUtil;
 import com.example.android.util.Utility;
 import com.example.weatherforecasttest.service.AutoUpdateService;
+import com.example.weatherforecasttest.service.ClockService;
 import com.weatherforecasttest.app.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 
 public class WeatherActivity extends Activity implements OnClickListener{
@@ -29,6 +40,14 @@ public class WeatherActivity extends Activity implements OnClickListener{
 	 * 用于显示城市名
 	 */
 	private TextView cityNameText;
+	
+	/** 
+	* @fieldName set_clock
+	* @describe  设置闹钟
+	* @fieldType Button
+	*/ 
+	private Button set_clock;
+	
 	/**
 	 * 用于显示发布时间
 	 */
@@ -58,12 +77,43 @@ public class WeatherActivity extends Activity implements OnClickListener{
 	 */
 	private Button refreshWeather;
 	
-	@Override
+	private TimePicker timePicker;
+	
+	Dialog dialog1;
+	 ButtonCombinedLayout save_ccancel;
+	
+	@SuppressLint("NewApi") @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.weather_layout);
+		
+		 dialog1= new Dialog(this);  
+			
+	        dialog1.setContentView(R.layout.set_clock);  
+	        dialog1.setTitle("设置时间");  
+	        timePicker = (TimePicker)dialog1.findViewById(R.id.tp_time);
+			timePicker.setIs24HourView(true);
+	        
+	        
+	         save_ccancel = (ButtonCombinedLayout)dialog1.findViewById(R.id.save_ccancel);
+	        SharedPreferences sharedPreferences  = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
+	        if(sharedPreferences.getString("time_hour", null) != null){
+	        	timePicker.setCurrentHour(Integer.parseInt(sharedPreferences.getString("time_hour", "0")));
+	        	timePicker.setCurrentMinute(Integer.parseInt(sharedPreferences.getString("time_minute","0")));
+	        	Intent i = new Intent(WeatherActivity.this,ClockService.class);
+				stopService(i);
+				 i = new Intent(WeatherActivity.this,ClockService.class);
+				startService(i);
+			}
+		 
+		 
+		 
 		// 初始化各控件
+		set_clock = (Button) findViewById(R.id.set_clock);
+		set_clock.setOnClickListener(this);
+		
+		
 		weatherInfoLayout = (LinearLayout) findViewById(R.id.weather_info_layout);
 		cityNameText = (TextView) findViewById(R.id.city_name);
 		publishText = (TextView) findViewById(R.id.publish_text);
@@ -92,6 +142,9 @@ public class WeatherActivity extends Activity implements OnClickListener{
 //	    LinearLayout adLayout=(LinearLayout)findViewById(R.id.adLayout);
 	    //将广告条加入到布局中
 //	    adLayout.addView(adView);
+		
+		
+		
 	}
 	
 	@Override
@@ -102,6 +155,41 @@ public class WeatherActivity extends Activity implements OnClickListener{
 			intent.putExtra("from_weather_activity", true);
 			startActivity(intent);
 			finish();
+			break;
+		case R.id.set_clock:
+		
+	        
+	        
+	        save_ccancel.setButtonCombined1("存储", new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					SharedPreferences sharedPreferences  = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
+					Editor editor =  sharedPreferences.edit();
+//					if(sharedPreferences.getString("time_hour", null) == null){
+						editor.putString("time_hour", DateTimeUtil.getNumberTimeFormat(timePicker.getCurrentHour()));
+						editor.putString("time_minute", DateTimeUtil.getNumberTimeFormat(timePicker.getCurrentMinute()));
+						editor.commit();
+//					}
+						Intent i = new Intent(WeatherActivity.this,ClockService.class);
+						stopService(i);
+						 i = new Intent(WeatherActivity.this,ClockService.class);
+						startService(i);
+						
+					dialog1.dismiss();
+				}
+			});
+	        save_ccancel.setButtonCombined2("取消", new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					dialog1.dismiss();
+				}
+			});
+	        
+	        dialog1.show();  
 			break;
 		case R.id.refresh_weather:
 			publishText.setText("同步中...");

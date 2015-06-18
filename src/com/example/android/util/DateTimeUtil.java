@@ -18,6 +18,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import android.provider.ContactsContract.Contacts.Data;
+
 /** 
  * @类名称: DateTimeUtil 
  * @描述: 日期时间工具
@@ -33,7 +35,8 @@ public class DateTimeUtil {
 	private static final String FORMAT_DATE="yyyy-MM-dd";
 	private static final String FORMAT_DATETIME="yyyy-MM-dd HH:mm:ss";
 	public static final String FORMAT_TIME="HH:mm";
-	
+	public static final String[] a_s_weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+	public static final int[] a_i_weekDays = {7,1,2,3,4,5,6};
 	
 	/** 
 	* @标题：InversionMotherDay 
@@ -189,6 +192,17 @@ public class DateTimeUtil {
 	}
 	
 	/** 
+	* @title getNumberFormat 
+	* @describe 获取数字格式
+	* @param val 值
+	* @return 补零
+	* @author hzong 
+	*/ 
+	public static String  getNumberTimeFormat(int val){
+		return String.format("%02d", val);
+	}
+	
+	/** 
 	* @标题：getDateFormat 
 	* @描述：自定义当前时间格式
 	* @参数：@param s_format 格式
@@ -292,11 +306,28 @@ public class DateTimeUtil {
 		return 1000;
 	}
 	                                    
+	public static int getWeekDayNumber(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		if (w < 0)
+			w = 0;
+		return a_i_weekDays[w];
+	}
 	
+	public static String getWeekDayString(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		if (w < 0)
+			w = 0;
+		return a_s_weekDays[w];
+	}
 	
 	
 	public static void main(String[] args) {
 		
-		DateTimeUtil.InversionMy97DatePicker(Arrays.asList(new String[]{"2015-04-05"}));
+		
+//		DateTimeUtil.InversionMy97DatePicker(Arrays.asList(new String[]{"2015-04-05"}));
 	}
 }
